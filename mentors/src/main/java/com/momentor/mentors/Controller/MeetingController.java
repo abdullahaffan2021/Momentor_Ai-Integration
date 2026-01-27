@@ -1,0 +1,39 @@
+package com.momentor.mentors.Controller;
+
+import com.momentor.mentors.DTO.MeetingRequestDto;
+import com.momentor.mentors.DTO.MeetingResponseDto;
+import com.momentor.mentors.DTO.MomRequestDto;
+import com.momentor.mentors.DTO.MomResponseDto;
+import com.momentor.mentors.Exception.ResourceNotFoundException;
+import com.momentor.mentors.Service.MeetingService;
+import com.momentor.mentors.Service.MomService;
+import com.momentor.mentors.entity.Meeting;
+import com.momentor.mentors.entity.Moms;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+@RestController
+@RequestMapping("/api/meetings")
+public class MeetingController {
+    @Autowired
+    private  MeetingService meetingservice;
+    @Autowired
+    private MomService momservice;
+    @PostMapping
+    public MeetingResponseDto createmeeting(@Valid @RequestBody MeetingRequestDto dto){
+        Meeting meet=new Meeting();
+        meet.setTitle(dto.getTitle());
+        meet.setMeetingdate(dto.getMeetingdate());
+        meet.setMentorid(dto.getMentorid());
+        Meeting saved=meetingservice.createmeeting(meet);
+        return new MeetingResponseDto(
+                saved.getId(), saved.getTitle(),saved.getMeetingdate()
+        );
+    }
+    @PostMapping("/{id}/mom")
+    public MomResponseDto addmom(@Valid @PathVariable Long id,@Valid @RequestBody MomRequestDto dto){
+        Meeting meeting=meetingservice.getmeeting(id);
+        Moms mom=momservice.savemom(dto.getMomtext(),meeting);
+        return new MomResponseDto(mom.getId(),mom.getMomtext());
+    }
+}
