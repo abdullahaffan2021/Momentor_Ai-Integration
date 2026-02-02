@@ -27,7 +27,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://127.0.0.1:5500", "http://localhost:5500", "http://localhost:3000","https://momentoraiintegration.netlify.app")); // Match your frontend origin
+        config.setAllowedOrigins(List.of("http://127.0.0.1:5500", "http://localhost:5500", "http://localhost:3000","https://momentoraiintegration.netlify.app","https://momentor-ai-integration.onrender.com")); // Match your frontend origin
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Origin", "Content-Type", "Accept", "Authorization"));
         config.setAllowCredentials(true);
@@ -83,4 +83,5 @@ public class SecurityConfig {
         return http.build();
     }
 }
+
 
