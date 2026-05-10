@@ -1,0 +1,4147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentor - Learning Management System</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --primary-color: #818cf8;
+            --primary-dark: #6366f1;
+            --primary-light: #a78bfa;
+            --secondary-color: #a78bfa;
+            --accent-color: #ec4899;
+            --success-color: #22c55e;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --info-color: #06b6d4;
+            --dark-color: #0f172a;
+            --dark-light: #1e293b;
+            --light-color: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --border-radius: 16px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.12);
+            --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #f0f4f9 100%);
+            color: var(--dark-color);
+            line-height: 1.6;
+            font-weight: 400;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        /* ===== Authentication Pages ===== */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -200px;
+            left: -200px;
+        }
+        .auth-container::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            bottom: -100px;
+            right: -100px;
+        }
+        .auth-box {
+            background: white;
+            padding: 50px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideInUp 0.6s ease-out;
+        }
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .auth-box h1 {
+            text-align: center;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 32px;
+            font-weight: 800;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .auth-box p {
+            text-align: center;
+            color: var(--gray-500);
+            margin-bottom: 32px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--dark-color);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        .form-group input::placeholder {
+            color: var(--gray-400);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group select[multiple] {
+            padding: 8px 12px;
+            background: white;
+            overflow-y: auto;
+        }
+
+        .form-group select[multiple] option {
+            padding: 8px 4px;
+            cursor: pointer;
+        }
+
+        .form-group select[multiple] option:checked {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.3s ease;
+            z-index: 0;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f56565 0%, #c53030 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(245, 101, 101, 0.3);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(245, 101, 101, 0.4);
+        }
+
+        .auth-link {
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .auth-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .auth-link a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .auth-link a:hover {
+            color: var(--primary-color);
+        }
+
+        .auth-link a:hover::after {
+            width: 100%;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #991b1b;
+            padding: 14px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+            border-left: 4px solid var(--danger-color);
+            animation: slideDown 0.3s ease;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            color: #166534;
+            padding: 14px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+            border-left: 4px solid var(--success-color);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== Dashboard ===== */
+        .dashboard {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #f0f4f9 100%);
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .navbar-brand {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.5px;
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark-color);
+            padding: 8px;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .hamburger:hover {
+            background: var(--gray-200);
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .navbar-menu a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 13px;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .navbar-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .navbar-menu a:hover {
+            color: #667eea;
+        }
+
+        .navbar-menu a:hover::after {
+            width: 100%;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding-left: 20px;
+            border-left: 1px solid var(--gray-200);
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .dashboard-header {
+            padding: 40px 20px 20px;
+            text-align: center;
+        }
+
+        .dashboard-header h1 {
+            font-size: 48px;
+            margin-bottom: 12px;
+            color: var(--dark-color);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        .dashboard-header p {
+            color: var(--gray-500);
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        /* ===== Cards & Sections ===== */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            backdrop-filter: blur(12px);
+            padding: 28px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--gray-200);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .card:hover {
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.15);
+            transform: translateY(-8px);
+            border-color: #667eea;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--dark-color);
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 28px;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .stat-label {
+            color: var(--gray-500);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progress-bar {
+            background: var(--gray-200);
+            height: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 16px;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        /* ===== Tables ===== */
+        .section {
+            background: white;
+            backdrop-filter: blur(12px);
+            padding: 32px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 30px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--dark-color);
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.3px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        table thead {
+            background: linear-gradient(135deg, #f5f7fa 0%, #f0f4f9 100%);
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        table th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 700;
+            color: var(--dark-color);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-size: 12px;
+        }
+
+        table td {
+            padding: 16px;
+            border-bottom: 1px solid var(--gray-100);
+            color: var(--dark-color);
+        }
+
+        table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        table tbody tr:hover {
+            background: var(--light-color);
+            box-shadow: inset 0 0 0 1px var(--gray-200);
+        }
+
+        .badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: inline-block;
+        }
+
+        .badge-success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+        }
+
+        .badge-warning {
+            background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+            color: #92400e;
+        }
+
+        .badge-danger {
+            background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+            color: #991b1b;
+        }
+
+        .badge-info {
+            background: linear-gradient(135deg, #a5f3fc 0%, #67e8f9 100%);
+            color: #0c4a6e;
+        }
+
+        /* ===== Forms & Modals ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: white;
+            padding: 48px;
+            border-radius: 16px;
+            max-width: 520px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--gray-200);
+        }
+
+        .modal-header {
+            margin-bottom: 28px;
+        }
+
+        .modal-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--dark-color);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .close-btn {
+            float: right;
+            font-size: 32px;
+            font-weight: 300;
+            color: var(--gray-400);
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--dark-color);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            margin-bottom: 28px;
+            color: var(--dark-color);
+            line-height: 1.6;
+            overflow-y: auto;
+            max-height: 60vh;
+        }
+
+        .modal-body p {
+            margin: 12px 0;
+        }
+
+        .modal-body strong {
+            color: var(--dark-color);
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--dark-color);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+            transform: translateY(-2px);
+        }
+
+        .btn-small {
+            padding: 11px 24px;
+            font-size: 13px;
+            border-radius: 8px;
+        }
+
+        /* ===== Status specific colors ===== */
+        .status-done {
+            color: var(--success-color);
+            font-weight: 700;
+        }
+
+        .status-in-progress {
+            color: var(--warning-color);
+            font-weight: 700;
+        }
+
+        .status-not-started {
+            color: var(--danger-color);
+            font-weight: 700;
+        }
+
+        /* ===== Utility Classes ===== */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-10 {
+            margin-top: 10px;
+        }
+
+        .mt-20 {
+            margin-top: 20px;
+        }
+
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray-500);
+        }
+
+        .spinner {
+            border: 4px solid var(--gray-200);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray-500);
+        }
+
+        .empty-state h3 {
+            color: var(--dark-color);
+            margin-bottom: 12px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .navbar-content {
+                padding: 0 15px;
+            }
+
+            .navbar {
+                padding: 12px 0;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            }
+
+            .navbar-brand {
+                font-size: 24px;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .navbar-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(12px);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+                flex-direction: column;
+                gap: 0;
+                padding: 12px 0;
+                border-top: 2px solid var(--primary-color);
+                z-index: 1000;
+            }
+
+            .navbar-menu.open {
+                display: flex;
+            }
+
+            .navbar-menu a {
+                padding: 14px 20px;
+                width: 100%;
+                text-align: left;
+                border-bottom: 1px solid var(--gray-100);
+                font-weight: 500;
+                transition: background-color 0.2s ease;
+            }
+
+            .navbar-menu a:hover {
+                background-color: #f0f4f9;
+            }
+
+            .navbar-menu a:last-child {
+                border-bottom: none;
+            }
+
+            .user-info {
+                flex-direction: column;
+                gap: 12px;
+                padding: 14px 20px;
+                border-top: 1px solid var(--gray-200);
+                margin-top: 8px;
+                background-color: #f8fafc;
+            }
+
+            .user-avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+
+            .dashboard-header {
+                padding: 30px 15px 15px;
+            }
+
+            .dashboard-header h1 {
+                font-size: 32px;
+                margin-bottom: 8px;
+                font-weight: 700;
+            }
+
+            .dashboard-header p {
+                font-size: 14px;
+                color: var(--gray-500);
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                margin-bottom: 20px;
+            }
+
+            .card {
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: var(--shadow-md);
+            }
+
+            .stat-box {
+                padding: 20px;
+                border-radius: 12px;
+            }
+
+            .stat-number {
+                font-size: 36px;
+                margin-bottom: 8px;
+                font-weight: 700;
+            }
+
+            .stat-label {
+                font-size: 12px;
+                letter-spacing: 0.5px;
+                color: var(--gray-500);
+            }
+
+            .section {
+                padding: 20px;
+                border-radius: 12px;
+                margin-bottom: 20px;
+                background: white;
+                box-shadow: var(--shadow-sm);
+            }
+
+            .section-title {
+                font-size: 18px;
+                margin-bottom: 18px;
+                font-weight: 700;
+            }
+
+            .table-responsive {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            table {
+                font-size: 13px;
+                width: 100%;
+                min-width: 500px;
+                table-layout: auto;
+            }
+
+            table th {
+                padding: 12px 10px;
+                font-size: 11px;
+                letter-spacing: 0.5px;
+                font-weight: 700;
+                background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                white-space: nowrap;
+            }
+
+            table td {
+                padding: 12px 10px;
+                vertical-align: middle;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+            }
+
+            /* Improve button layout for mobile */
+            .btn {
+                padding: 10px 16px;
+                font-size: 13px;
+                border-radius: 8px;
+                transition: all 0.2s ease;
+                font-weight: 600;
+            }
+
+            .btn-small {
+                padding: 8px 12px;
+                font-size: 12px;
+                border-radius: 6px;
+                min-height: 36px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            /* Stack buttons vertically in actions column on mobile */
+            table td:last-child {
+                min-width: 100px;
+                text-align: center;
+            }
+
+            table td:last-child .btn-small {
+                display: inline-block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 95px;
+                font-size: 11px;
+                margin: 0 2px;
+            }
+
+            .modal-content {
+                padding: 28px 20px;
+                margin: 20px auto;
+                max-width: 95%;
+                border-radius: 16px;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            .modal-header {
+                margin-bottom: 20px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .modal-title {
+                font-size: 22px;
+                font-weight: 700;
+            }
+
+            .close-btn {
+                font-size: 28px;
+                cursor: pointer;
+            }
+
+            .modal-body {
+                font-size: 14px;
+                margin-bottom: 20px;
+            }
+
+            .modal-footer {
+                gap: 10px;
+                display: flex;
+                flex-direction: row-reverse;
+            }
+
+            .auth-box {
+                padding: 30px 20px;
+                max-width: 100%;
+                margin: 20px auto;
+                border-radius: 16px;
+                box-shadow: var(--shadow-lg);
+            }
+
+            .auth-box h1 {
+                font-size: 28px;
+                margin-bottom: 10px;
+                font-weight: 700;
+            }
+
+            .auth-box p {
+                font-size: 13px;
+                margin-bottom: 24px;
+                color: var(--gray-500);
+            }
+
+            .form-group {
+                margin-bottom: 18px;
+            }
+
+            .form-group label {
+                font-size: 13px;
+                margin-bottom: 8px;
+                display: block;
+                font-weight: 600;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                width: 100%;
+                padding: 12px 14px;
+                font-size: 14px;
+                border-radius: 8px;
+                border: 1px solid var(--gray-200);
+                box-sizing: border-box;
+                font-family: inherit;
+                transition: border-color 0.2s ease;
+            }
+
+            .form-group input:focus,
+            .form-group select:focus,
+            .form-group textarea:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1);
+            }
+
+            .badge {
+                padding: 4px 10px;
+                font-size: 11px;
+                border-radius: 4px;
+                display: inline-block;
+            }
+
+            .logout-btn {
+                padding: 8px 14px;
+                font-size: 11px;
+                cursor: pointer;
+            }
+
+            .card-title {
+                font-size: 16px;
+                font-weight: 700;
+            }
+
+            .error-message,
+            .success-message {
+                padding: 12px 16px;
+                border-radius: 8px;
+                margin-bottom: 16px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            * {
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .container {
+                padding: 0 12px;
+            }
+
+            .navbar-content {
+                padding: 0 12px;
+            }
+
+            .navbar {
+                padding: 10px 0;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .navbar-brand {
+                font-size: 20px;
+                font-weight: 700;
+            }
+
+            .hamburger {
+                font-size: 24px;
+                padding: 8px;
+                cursor: pointer;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .navbar-menu {
+                padding: 10px 0;
+            }
+
+            .navbar-menu a {
+                padding: 14px 16px;
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            .user-info {
+                padding: 12px 16px;
+                background-color: #f8fafc;
+            }
+
+            .user-avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+                font-weight: 700;
+            }
+
+            .dashboard-header {
+                padding: 20px 12px 12px;
+            }
+
+            .dashboard-header h1 {
+                font-size: 24px;
+                margin-bottom: 6px;
+                font-weight: 700;
+            }
+
+            .dashboard-header p {
+                font-size: 12px;
+                color: var(--gray-500);
+            }
+
+            .content {
+                padding: 12px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-bottom: 16px;
+            }
+
+            .card {
+                padding: 16px;
+                border-radius: 10px;
+                box-shadow: var(--shadow-sm);
+            }
+
+            .stat-box {
+                padding: 16px;
+                border-radius: 10px;
+                text-align: center;
+            }
+
+            .stat-number {
+                font-size: 28px;
+                margin-bottom: 6px;
+                font-weight: 700;
+            }
+
+            .stat-label {
+                font-size: 11px;
+                letter-spacing: 0.3px;
+                color: var(--gray-500);
+            }
+
+            .progress-bar {
+                height: 6px;
+                border-radius: 3px;
+            }
+
+            .section {
+                padding: 16px;
+                border-radius: 10px;
+                margin-bottom: 16px;
+                background: white;
+                box-shadow: var(--shadow-sm);
+            }
+
+            .section-title {
+                font-size: 16px;
+                margin-bottom: 14px;
+                font-weight: 700;
+            }
+
+            table {
+                font-size: 12px;
+                width: 100%;
+                min-width: 420px;
+            }
+
+            table th {
+                padding: 10px 8px;
+                font-size: 11px;
+                font-weight: 700;
+                background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+                position: sticky;
+                top: 0;
+                z-index: 10;
+            }
+
+            table td {
+                padding: 10px 8px;
+                word-break: break-word;
+                vertical-align: middle;
+            }
+
+            .btn {
+                padding: 12px 16px;
+                font-size: 13px;
+                border-radius: 6px;
+                min-height: 44px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                font-weight: 600;
+            }
+
+            .btn-small {
+                padding: 10px 12px;
+                font-size: 12px;
+                border-radius: 6px;
+                min-height: 40px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                white-space: normal;
+            }
+
+            .btn-small {
+                padding: 10px 12px;
+                font-size: 12px;
+                border-radius: 6px;
+                min-height: 40px;
+            }
+
+            table td:last-child {
+                text-align: center;
+            }
+
+            table td:last-child .btn-small {
+                display: inline-block;
+                margin: 0 2px;
+                font-size: 11px;
+            }
+
+            .modal {
+                padding: 10px;
+            }
+
+            .modal-content {
+                padding: 24px 16px;
+                margin: 10px auto;
+                border-radius: 12px;
+                max-height: 85vh;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .modal-header {
+                margin-bottom: 16px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .modal-title {
+                font-size: 20px;
+                font-weight: 700;
+            }
+
+            .close-btn {
+                font-size: 32px;
+                cursor: pointer;
+                line-height: 1;
+                min-height: 44px;
+                min-width: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .modal-body {
+                font-size: 13px;
+                margin-bottom: 16px;
+                line-height: 1.6;
+            }
+
+            .modal-body p {
+                margin: 8px 0;
+            }
+
+            .modal-footer {
+                gap: 10px;
+                display: flex;
+                flex-direction: row-reverse;
+                flex-wrap: wrap;
+            }
+
+            .auth-container {
+                padding: 12px;
+            }
+
+            .auth-box {
+                padding: 24px 16px;
+                max-width: 100%;
+                margin: 10px auto;
+                border-radius: 12px;
+                box-shadow: var(--shadow-md);
+            }
+
+            .auth-box h1 {
+                font-size: 24px;
+                margin-bottom: 8px;
+                font-weight: 700;
+            }
+
+            .auth-box p {
+                font-size: 13px;
+                margin-bottom: 20px;
+                color: var(--gray-500);
+            }
+
+            .form-group {
+                margin-bottom: 16px;
+            }
+
+            .form-group label {
+                font-size: 12px;
+                margin-bottom: 6px;
+                display: block;
+                font-weight: 600;
+                color: var(--dark-color);
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                width: 100%;
+                padding: 12px 14px;
+                font-size: 16px; /* Prevents iOS zoom */
+                border-radius: 6px;
+                border: 1px solid var(--gray-200);
+                box-sizing: border-box;
+                font-family: inherit;
+                transition: border-color 0.2s ease;
+            }
+
+            .form-group input:focus,
+            .form-group select:focus,
+            .form-group textarea:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1);
+            }
+
+            .auth-link {
+                margin-top: 16px;
+                text-align: center;
+            }
+
+            .auth-link a {
+                font-size: 13px;
+                color: var(--primary-color);
+                text-decoration: none;
+            }
+
+            .error-message,
+            .success-message {
+                font-size: 12px;
+                padding: 12px 14px;
+                margin-bottom: 16px;
+                border-radius: 6px;
+                border-left: 4px solid;
+            }
+
+            .badge {
+                padding: 4px 8px;
+                font-size: 10px;
+                border-radius: 4px;
+                display: inline-block;
+                font-weight: 600;
+            }
+
+            .logout-btn {
+                padding: 10px 14px;
+                font-size: 12px;
+                cursor: pointer;
+                min-height: 40px;
+            }
+
+            .card-title {
+                font-size: 14px;
+                font-weight: 700;
+            }
+
+            /* Ensure touch-friendly tap targets */
+            button,
+            a[role="button"],
+            input[type="button"],
+            input[type="submit"] {
+                min-height: 44px;
+                min-width: 44px;
+            }
+
+            /* Improve table responsiveness */
+            .table-responsive {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                width: 100%;
+                border-radius: 10px;
+                box-shadow: var(--shadow-sm);
+            }
+
+            .table-responsive table {
+                min-width: 400px;
+            }
+
+            /* Sticky header on scroll */
+            .table-responsive thead {
+                position: sticky;
+                top: 0;
+                z-index: 10;
+            }
+
+            .table-responsive th {
+                background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+                font-size: 10px;
+                padding: 8px 6px;
+                font-weight: 700;
+            }
+
+            .table-responsive td {
+                font-size: 11px;
+                padding: 8px 6px;
+            }
+
+            /* Responsive modal for ultra-mobile */
+            .modal-content {
+                margin: 0;
+                max-height: calc(100vh - 20px);
+                border-radius: 12px;
+                width: calc(100% - 20px);
+            }
+
+            /* Better spacing for form components */
+            textarea {
+                resize: vertical;
+                min-height: 100px;
+            }
+
+            /* Improve badge positioning in tables */
+            table td:first-child {
+                position: relative;
+            }
+
+            /* Optimize toast for mobile */
+            .toast-container {
+                right: 10px;
+                left: 10px;
+                bottom: 80px;
+                max-width: calc(100vw - 20px);
+            }
+
+            .toast {
+                max-width: 100%;
+                min-width: auto;
+                width: auto;
+                margin: 0 auto;
+            }
+        }
+
+        textarea {
+            font-family: inherit;
+        }
+
+        /* Toast notifications */
+        .toast-container {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-end;
+            max-height: 100px;
+            overflow: hidden;
+        }
+
+        .toast {
+            min-width: 200px;
+            max-width: 360px;
+            padding: 14px 18px;
+            border-radius: 8px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            font-weight: 600;
+            font-size: 14px;
+            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.3s ease;
+        }
+
+        .toast.success { 
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-left: 4px solid #047857;
+        }
+        .toast.error { 
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border-left: 4px solid #b91c1c;
+        }
+        .toast.info  { 
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            border-left: 4px solid #0369a1;
+        }
+        .toast.warning { 
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border-left: 4px solid #b45309;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideOut {
+            from { opacity: 1; transform: translateY(0); }
+            to   { opacity: 0; transform: translateY(20px); }
+        }
+
+        /* Confirm modal */
+        .confirm-modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            background: rgba(15,23,42,0.45);
+        }
+
+        .confirm-modal.active { display: flex; }
+
+        .confirm-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            width: 90%;
+            max-width: 420px;
+            color: var(--dark-color);
+        }
+
+        .confirm-box p { margin: 0 0 8px 0; }
+        /* ===== Deadline Alert Banner ===== */
+
+.deadline-alert-banner{
+    background: linear-gradient(90deg,#fff7ed,#ffedd5);
+    border-bottom: 1px solid #fed7aa;
+    padding: 12px 0;
+    animation: slideDown 0.4s ease;
+}
+
+.deadline-alert-banner strong{
+    color:#c2410c;
+}
+
+.deadline-alert-item{
+    background:#fff;
+    border-left:4px solid #f97316;
+    padding:10px 14px;
+    border-radius:8px;
+    margin-bottom:8px;
+    font-size:14px;
+}
+
+.deadline-alert-item.urgent{
+    border-left-color:#ef4444;
+}
+
+.deadline-alert-item.warning{
+    border-left-color:#f59e0b;
+}
+.priority{
+    font-weight:600;
+    margin-left:5px;
+}
+
+.alert-warning{
+    background:#fff3cd;
+    color:#856404;
+}
+
+.alert-urgent{
+    background:#f8d7da;
+    color:#721c24;
+}
+    </style>
+</head>
+<body>
+    <!-- ===== LOGIN PAGE ===== -->
+    <div id="loginPage" class="auth-container active">
+        <div class="auth-box">
+            <h1>Welcome Back</h1>
+            <p>Sign in to your account</p>
+            
+            <div id="loginError" class="error-message"></div>
+            <div id="loginSuccess" class="success-message"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Sign In</button>
+            </form>
+
+            <div class="auth-link">
+                Don't have an account? <a onclick="switchToSignup()">Sign up</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SIGNUP PAGE ===== -->
+    <div id="signupPage" class="auth-container hidden">
+        <div class="auth-box">
+            <h1>Create Account</h1>
+            <p>Join as a Mentor or Student</p>
+
+            <div id="signupError" class="error-message"></div>
+            <div id="signupSuccess" class="success-message"></div>
+
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" placeholder="Enter your name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Minimum 5 characters" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupRole">Role</label>
+                    <select id="signupRole" required>
+                        <option value="">Select a role</option>
+                        <option value="MENTOR">Mentor</option>
+                        <option value="STUDENT">Student</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Create Account</button>
+            </form>
+
+            <div class="auth-link">
+                Already have an account? <a onclick="switchToLogin()">Sign in</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div id="dashboard" class="dashboard">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="navbar-content">
+                    <div class="navbar-brand">Mo-Mentor</div>
+                    <button class="hamburger" onclick="toggleMenu()">☰</button>
+                    <div class="navbar-menu" id="navbarMenu">
+                        <a onclick="showSection('dashboard')">Dashboard</a>
+                        <a id="tasksMenu" onclick="showSection('tasks')">Tasks</a>
+                        <a id="meetingsMenu" onclick="showSection('meetings')" class="hidden">Meetings</a>
+                        <a id="meetingSummaryMenu" onclick="showSection('meetingSummary')">Meeting Summary</a>
+                        <a id="usersMenu" onclick="showSection('users')" class="hidden">Users</a>
+                        <a id="aiTasksMenu" onclick="showSection('aiApproval')" class="hidden">Task Approval <span id="taskApprovalBadge" class="badge badge-warning" style="display: none; font-size: 10px; padding: 2px 6px; margin-left: 5px;">0</span></a>
+                        <div class="user-info">
+                            <div class="user-avatar" id="userAvatar">M</div>
+                            <span id="userName">User</span>
+                            <button class="logout-btn" onclick="logout()">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- Deadline Alert Banner -->
+<div id="deadlineAlertBanner" class="deadline-alert-banner hidden">
+    <div class="container">
+        <div id="deadlineAlertContent"></div>
+    </div>
+</div>
+        <!-- Dashboard Section -->
+        <section id="dashboardSection" class="section" style="display: block;">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h1 id="dashboardTitle">Welcome to Mentor Dashboard</h1>
+                    <p id="dashboardSubtitle">Manage your learning journey</p>
+                </div>
+
+                <!-- Dashboard Stats -->
+                <div class="grid" id="dashboardStats">
+                    <!-- Stats loaded dynamically -->
+                </div>
+
+                <!-- Recent Tasks -->
+                <div class="section">
+                    <div class="section-title">Recent Tasks</div>
+                    <div class="table-responsive">
+                        <table id="recentTasksTable">
+                            <thead>
+                                <tr>
+                                    <th>Task Title</th>
+                                    <th>Assigned To</th>
+                                    <th>Priority</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentTasksBody">
+                                <tr>
+                                    <td colspan="6" class="text-center">Loading tasks...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tasks Section -->
+        <section id="tasksSection" class="hidden">
+            <div class="container content">
+                <div id="aiProcessingBanner" class="section" style="display: none; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-left: 4px solid #3b82f6;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="spinner" style="width: 30px; height: 30px; border-width: 2px; margin: 0;"></div>
+                        <div>
+                            <strong>AI Processing...</strong>
+                            <p style="margin: 4px 0 0 0; font-size: 13px; color: #1e40af;">New tasks may appear shortly as AI analyzes your meeting recording.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 class="section-title" style="margin: 0;">Task Management</h2>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary btn-small" id="newTaskBtn" onclick="openNewTaskModal()" style="max-width: 200px;">+ Create Task</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="tasksTable">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Assigned To</th>
+                                    <th>Priority</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                    <th>Resources</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tasksTableBody">
+                                <tr>
+                                    <td colspan="7" class="text-center">Loading tasks...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Meetings Section -->
+        <section id="meetingsSection" class="hidden">
+            <div class="container content">
+                <div class="section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 class="section-title" style="margin: 0;">Meetings</h2>
+                        <button class="btn btn-primary btn-small" onclick="openNewMeetingModal()" style="max-width: 200px;">+ Create Meeting</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="meetingsTable">
+                            <thead>
+                                <tr>
+                                    <th>Meeting Title</th>
+                                    <th>Date</th>
+                                    <th>Progress</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="meetingsTableBody">
+                                <tr>
+                                    <td colspan="4" class="text-center">Loading meetings...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Meeting Summary Section -->
+        <section id="meetingSummarySection" class="hidden">
+            <div class="container content">
+                <div class="section">
+                    <h2 class="section-title" style="margin-bottom: 20px;">Meeting Summary</h2>
+                    <div id="meetingSummaryContainer">
+                        <!-- Meeting cards will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Users Section -->
+        <section id="usersSection" class="hidden">
+            <div class="container content">
+                <div class="section">
+                    <h2 class="section-title">User Management</h2>
+                    <div class="table-responsive">
+                        <table id="usersTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <tr>
+                                    <td colspan="4" class="text-center">Loading users...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Approval Section -->
+        <section id="aiApprovalSection" class="hidden">
+            <div class="container content">
+                <div class="section">
+                    <div class="section-title">Task Approval</div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>AI Suggested Assignment</th>
+                                    <th>Priority</th>
+                                    <th>Due Date</th>
+                                    <th>Resources</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="aiApprovalTableBody">
+                                <tr>
+                                    <td colspan="6" class="text-center">Loading Task Approval...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ===== MODALS ===== -->
+    <!-- New Task Modal -->
+    <div id="newTaskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeModal('newTaskModal')">&times;</button>
+                <h2 class="modal-title">Create New Task</h2>
+            </div>
+            <form id="taskForm" onsubmit="handleCreateTask(event)">
+                <div class="modal-body">
+                    <div id="taskFormError" class="error-message"></div>
+
+                    <div class="form-group">
+                        <label for="momId">Select Meeting Minutes (MOM)</label>
+                        <select id="momId" required>
+                            <option value="">Loading...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskTitle">Task Title</label>
+                        <input type="text" id="taskTitle" placeholder="Enter task title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskAssignedTo">Assign To (Student)</label>
+                        <select id="taskAssignedTo" required>
+                            <option value="">Select a student</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskPriority">Priority</label>
+                        <select id="taskPriority" required>
+                            <option value="LOW">Low</option>
+                            <option value="MEDIUM" selected>Medium</option>
+                            <option value="HIGH">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDueDate">Due Date</label>
+                        <input type="datetime-local" id="taskDueDate">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-small" onclick="closeModal('newTaskModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-small">Create Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Update Task Status Modal -->
+    <div id="updateTaskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeModal('updateTaskModal')">&times;</button>
+                <h2 class="modal-title">Update Task Status</h2>
+            </div>
+            <form id="updateTaskForm" onsubmit="handleUpdateTaskStatus(event)">
+                <div class="modal-body">
+                    <div id="updateTaskError" class="error-message"></div>
+
+                    <div class="form-group">
+                        <label for="taskStatusSelect">Select Status</label>
+                        <select id="taskStatusSelect" required>
+                            <option value="NOT_STARTED">Not Started</option>
+                            <option value="IN_PROGRESS">In Progress</option>
+                            <option value="DONE">Done</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-small" onclick="closeModal('updateTaskModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-small">Update Status</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Task Approval Modal -->
+    <div id="aiTasksModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeModal('aiTasksModal')">&times;</button>
+                <h2 class="modal-title">Task Approval (Pending Approval)</h2>
+            </div>
+            <div class="modal-body">
+                <div id="aiTasksContent" style="max-height: 400px; overflow-y: auto;">
+                    <p style="text-align: center; color: var(--gray-500);">Loading Task Approval...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-small" onclick="closeModal('aiTasksModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit AI Task Modal -->
+    <div id="editAiTaskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeModal('editAiTaskModal')">&times;</button>
+                <h2 class="modal-title">Edit AI Task</h2>
+            </div>
+            <form id="editAiTaskForm" onsubmit="handleEditAiTask(event)">
+                <div class="modal-body">
+                    <div id="editAiTaskError" class="error-message"></div>
+
+                    <div class="form-group">
+                        <label for="editTaskTitle">Task Title</label>
+                        <input type="text" id="editTaskTitle" placeholder="Enter task title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editTaskAssignedTo">Assign To (User)</label>
+                        <select id="editTaskAssignedTo" required>
+                            <option value="">Select a user</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editTaskResources">Resources (AI Generated)</label>
+                        <div id="editTaskResourcesLinks" style="padding: 10px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; min-height: 50px;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editTaskDueDate">Due Date</label>
+                        <input type="date" id="editTaskDueDate">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editTaskPriority">Priority</label>
+                        <select id="editTaskPriority">
+                            <option value="HIGH">High</option>
+                            <option value="MEDIUM">Medium</option>
+                            <option value="LOW">Low</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editTaskUrgent">Urgent</label>
+                        <input type="checkbox" id="editTaskUrgent">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-small" onclick="closeModal('editAiTaskModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-small">Update Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- New Meeting Modal -->
+    <div id="newMeetingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeModal('newMeetingModal')">&times;</button>
+                <h2 class="modal-title">Create New Meeting</h2>
+            </div>
+            <form id="meetingForm" onsubmit="handleCreateMeeting(event)">
+                <div class="modal-body">
+                    <div id="meetingFormError" class="error-message"></div>
+
+                    <div class="form-group">
+                        <label for="meetingTitle">Meeting Title</label>
+                        <input type="text" id="meetingTitle" placeholder="Enter meeting title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="meetingDate">Meeting Date & Time</label>
+                        <input type="datetime-local" id="meetingDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="meetingType">Meeting Type</label>
+                        <select id="meetingType" onchange="onMeetingTypeChange()" required>
+                            <option value="SOLO">Solo Meeting</option>
+                            <option value="TEAM">Team Meeting</option>
+                        </select>
+                    </div>
+
+                    <!-- Team Setup Section (Hidden by default) -->
+                    <div id="teamSetupSection" style="display:none;">
+                        <div class="form-group">
+                            <label for="numTeams">Number of Teams</label>
+                            <input type="number" id="numTeams" min="1" max="10" value="1" onchange="renderTeamInputs()" required>
+                        </div>
+                        <div id="teamsInputs"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-small" onclick="closeModal('newMeetingModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-small">Create Meeting</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Add MOM Modal -->
+    <div id="addMOMModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeModal('addMOMModal')">&times;</button>
+                <h2 class="modal-title">Add Minutes of Meeting</h2>
+            </div>
+            <form id="momForm" onsubmit="handleAddMOM(event)">
+                <div class="modal-body">
+                    <div id="momFormError" class="error-message"></div>
+
+                    <div class="form-group">
+                        <label for="momText">Meeting Notes</label>
+                        <textarea id="momText" placeholder="Enter meeting minutes" required style="width: 100%; padding: 12px; border: 1px solid #cbd5e0; border-radius: 8px; font-family: inherit; min-height: 120px;"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-small" onclick="closeModal('addMOMModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-small">Save MOM</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- View Meeting + MOM Modal -->
+    <div id="viewMeetingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeModal('viewMeetingModal')">&times;</button>
+                <h2 class="modal-title">Meeting Details</h2>
+            </div>
+            <div class="modal-body" id="viewMeetingContent">
+                <!-- Filled dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-small" onclick="closeModal('viewMeetingModal')">Close</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // ===== API Configuration =====
+        const API_BASE_URL = 'http://localhost:8080/api';
+        let authToken = null;
+        let currentUser = null;
+        let currentEditingTaskId = null;
+        let currentMeetingId = null;
+        let recentAudioUploadTime = null; // Track recent audio uploads
+        const uploadedMeetings = new Set(); // meetings with audio uploaded
+        // ===== Status Badge Helper (GLOBAL) =====
+function getStatusBadgeClass(status) {
+    if (!status) return 'badge-info';
+
+    switch (status.toUpperCase()) {
+        case 'DONE':
+            return 'badge-success';
+        case 'IN_PROGRESS':
+            return 'badge-warning';
+        case 'NOT_STARTED':
+            return 'badge-danger';
+        default:
+            return 'badge-info';
+    }
+}
+
+        // ===== Audio Upload Handler =====
+        async function handleAudioUpload(meetingId) {
+            // If already uploaded for this meeting, inform user and return
+            if (uploadedMeetings.has(meetingId)) {
+                showToast('Audio uploaded successfully for this meeting', 'info', 4000);
+                return;
+            }
+
+            const fileInput = document.getElementById(`audioFile_${meetingId}`);
+            if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+                showError('', 'Please select an audio file');
+                return;
+            }
+
+            const audioFile = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('audio', audioFile);
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/meetings/${meetingId}/audio`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${authToken}` },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const error = await response.json().catch(() => ({message: 'Failed to upload audio'}));
+                    throw new Error(error.message || 'Failed to upload audio');
+                }
+                showSuccess('', 'Audio uploaded! AI is processing your meeting...');
+                fileInput.value = '';
+                recentAudioUploadTime = Date.now();
+                // mark meeting as uploaded and disable upload controls
+                uploadedMeetings.add(meetingId);
+                const uploadBtn = document.getElementById(`uploadBtn_${meetingId}`);
+                if (uploadBtn) {
+                    uploadBtn.disabled = true;
+                    uploadBtn.innerText = 'Audio Uploaded';
+                    uploadBtn.classList.add('btn-disabled');
+                }
+                if (fileInput) {
+                    fileInput.disabled = true;
+                }
+                showToast('AI is analyzing your audio - this may take a few seconds', 'info', 5000);
+
+                // Poll for MOM and tasks every 3 seconds for up to 30 seconds
+                let pollCount = 0;
+                const maxPolls = 10;
+                const pollInterval = setInterval(async () => {
+                    pollCount++;
+                    try {
+                        // Try to fetch MOM for the meeting
+                        const momRes = await fetch(`${API_BASE_URL}/meetings/${meetingId}/mom`, {
+                            headers: { 'Authorization': `Bearer ${authToken}` }
+                        });
+                        const momData = await momRes.json();
+                        // Determine MOM identifier (backend may return `id` or `momId`)
+                        const resolvedMomId = momData && (momData.id || momData.momId || momData.momid || null);
+                        // Try to fetch tasks for the meeting's MOM
+                        let tasksGenerated = false;
+                        if (resolvedMomId) {
+                            // Try to fetch tasks for this MOM
+                            const tasksRes = await fetch(`${API_BASE_URL}/tasks`, {
+                                headers: { 'Authorization': `Bearer ${authToken}` }
+                            });
+                            if (tasksRes.ok) {
+                                const allTasks = await tasksRes.json();
+                                tasksGenerated = allTasks.some(t => t.momId === resolvedMomId || t.momid === resolvedMomId || t.meetingMomId === resolvedMomId);
+                            }
+                        }
+                        if (resolvedMomId && tasksGenerated) {
+                            clearInterval(pollInterval);
+                            showToast('Task and MOM are generated by AI successfully!', 'success', 6000);
+                            loadAllTasks();
+                            loadPendingAiTasks && loadPendingAiTasks();
+                        }
+                    } catch (e) {
+                        // Ignore errors during polling
+                    }
+                    if (pollCount >= maxPolls) {
+                        clearInterval(pollInterval);
+                    }
+                }, 3000);
+                
+            } catch (error) {
+                console.error('Audio upload error:', error);
+                showError('', error.message || 'Failed to upload audio');
+            }
+        }
+
+        // ===== Authentication Functions =====
+        function switchToLogin() {
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('signupPage').classList.add('hidden');
+        }
+
+        function switchToSignup() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('signupPage').classList.remove('hidden');
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Invalid credentials');
+                }
+
+                const data = await response.json();
+                authToken = data.token;
+                localStorage.setItem('authToken', authToken);
+
+                // Extract user info from token (decode JWT)
+                const payload = JSON.parse(atob(authToken.split('.')[1]));
+                currentUser = {
+                    email: payload.sub,
+                    role: payload.role
+                };
+                
+                // Immediately fetch and set user name from backend
+                try {
+                    const userRes = await fetch(`${API_BASE_URL}/users/getuser`, {
+                        headers: { 'Authorization': `Bearer ${authToken}` }
+                    });
+                    if (userRes.ok) {
+                        const users = await userRes.json();
+                        const foundUser = users.find(u => u.email === currentUser.email);
+                        if (foundUser && foundUser.name) {
+                            currentUser.name = foundUser.name;
+                            console.log('Set user name on login:', currentUser.name);
+                        }
+                    }
+                } catch (e) {
+                    console.warn('Could not fetch user name during login:', e);
+                }
+                
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+                showDashboard();
+            } catch (error) {
+                showError('loginError', error.message);
+            }
+        }
+
+     async function handleSignup(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const password = document.getElementById('signupPassword').value;
+    const role = document.getElementById('signupRole').value;
+
+    // 🔴 STEP 1: Empty check
+    if (!name || !email || !password || !role) {
+        showError('signupError', 'All fields are required');
+        return;
+    }
+
+    // 🔴 STEP 2: Name format validation
+    if (!isValidNameWithInitial(name)) {
+        showError(
+            'signupError',
+            'Name format: Firstname Initial or Firstname Initial Initial (e.g., Abdullah A or Abdullah A S )'
+        );
+        return;
+    }
+
+    // 🔴 STEP 3: Email format (basic)
+    if (!email.includes('@')) {
+        showError('signupError', 'Please enter a valid email');
+        return;
+    }
+
+    // 🔴 STEP 4: Password length
+    if (password.length < 5) {
+        showError('signupError', 'Password must be at least 5 characters');
+        return;
+    }
+
+    try {
+        // 🔴 STEP 5: Send request to backend
+        const response = await fetch(`${API_BASE_URL}/auth/createuser`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password, role })
+        });
+
+        // 🔴 STEP 6: Handle backend errors
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(
+                error.name ||
+                error.email ||
+                error.password ||
+                error.message ||
+                'Signup failed'
+            );
+        }
+
+        // ✅ STEP 7: Success
+        showSuccess('signupSuccess', 'Account created! Please sign in.');
+        setTimeout(() => switchToLogin(), 1500);
+
+    } catch (error) {
+        showError('signupError', error.message);
+    }
+}
+
+
+        function logout() {
+            authToken = null;
+            currentUser = null;
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('loginPage').classList.remove('hidden');
+            switchToLogin();
+        }
+
+        // ===== Dashboard Functions =====
+        async function showDashboard() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('signupPage').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('active');
+            
+            await loadCurrentUserProfile();
+            setupRoleBasedAccess();
+            updateUserInfo();
+            updateDashboardSubtitle();
+            loadDashboardSummary();
+            loadRecentTasks();
+            loadDeadlineAlerts();
+            if (currentUser.role === 'MENTOR' || currentUser.role === 'ADMIN') {
+                loadPendingAiTasks();
+            }
+        }
+
+        function updateDashboardSubtitle() {
+            const titleElement = document.getElementById('dashboardTitle');
+            const subtitleElement = document.getElementById('dashboardSubtitle');
+            
+            const roleMessages = {
+                'MENTOR': { title: 'Welcome to Mentor Dashboard', subtitle: 'Create and manage meetings and tasks' },
+                'STUDENT': { title: 'Welcome To User Dashboard', subtitle: 'Track your assigned tasks and progress' },
+                'ADMIN': { title: 'Welcome to Admin Dashboard', subtitle: 'Manage all users and system tasks' }
+            };
+            
+            const messages = roleMessages[currentUser.role] || { title: 'Welcome to Dashboard', subtitle: 'Manage your learning journey' };
+            
+            if (titleElement) {
+                titleElement.textContent = messages.title;
+            }
+            if (subtitleElement) {
+                subtitleElement.textContent = messages.subtitle;
+            }
+        }
+
+        function setupRoleBasedAccess() {
+            const role = currentUser.role;
+            const meetingsMenu = document.getElementById('meetingsMenu');
+            const usersMenu = document.getElementById('usersMenu');
+            const newTaskBtn = document.getElementById('newTaskBtn');
+
+            // Role-based menu visibility
+            if (role === 'MENTOR' || role === 'ADMIN') {
+                meetingsMenu.classList.remove('hidden');
+            } else {
+                meetingsMenu.classList.add('hidden');
+            }
+
+            if (role === 'ADMIN') {
+                usersMenu.classList.remove('hidden');
+            } else {
+                usersMenu.classList.add('hidden');
+            }
+
+            if (role === 'MENTOR') {
+                document.getElementById('aiTasksMenu').classList.remove('hidden');
+            } else {
+                document.getElementById('aiTasksMenu').classList.add('hidden');
+            }
+
+            // Task button visibility
+            if (role === 'MENTOR' || role === 'ADMIN') {
+                if (newTaskBtn) newTaskBtn.classList.remove('hidden');
+            } else {
+                if (newTaskBtn) newTaskBtn.classList.add('hidden');
+            }
+        }
+
+        function updateUserInfo() {
+            const firstLetter = currentUser.email.charAt(0).toUpperCase();
+            document.getElementById('userAvatar').textContent = firstLetter;
+            document.getElementById('userName').textContent = currentUser.email;
+        }
+
+        async function loadDashboardSummary() {
+            try {
+                if (!currentUser || !currentUser.role) {
+                    console.warn('loadDashboardSummary: no currentUser or role present', currentUser);
+                    return;
+                }
+                
+                // Build URL based on user role to get their own dashboard summary
+                let url = `${API_BASE_URL}/tasks/dashboard/summary`;
+                
+                if (currentUser.role === 'MENTOR') {
+                    // Mentors see only their own meeting tasks
+                    url = `${API_BASE_URL}/tasks/dashboard/summary/mentor`;
+                } else if (currentUser.role === 'STUDENT') {
+                    // For STUDENT: use name (tasks are assigned by name, not email)
+                    const studentName = encodeURIComponent(currentUser.name || currentUser.email);
+                    url = `${API_BASE_URL}/tasks/user/${studentName}`;
+                }
+                // Admins can see all (default /tasks/dashboard/summary)
+
+                console.log('Dashboard URL:', url, 'role:', currentUser.role, 'authToken present:', !!authToken);
+                const response = await fetch(url, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                console.log('Dashboard response status:', response.status, response.statusText);
+                
+                if (!response.ok) {
+                    let errBody = '';
+                    try {
+                        errBody = await response.text();
+                    } catch(e) {
+                        errBody = 'Could not read error body';
+                    }
+                    console.error('Dashboard error body:', errBody);
+                    throw new Error(`Failed to load summary: ${response.status} ${errBody}`);
+                }
+                
+                const data = await response.json();
+                console.log('Dashboard data:', data);
+
+                // For STUDENT role using /tasks/user endpoint, calculate stats from array
+                let totalTasks = 0, doneTasks = 0, inProgressTasks = 0, notStartedTasks = 0, overallProgress = 0;
+                
+                if (currentUser.role === 'STUDENT' && Array.isArray(data)) {
+                    // data is an array of tasks from /api/tasks/user/{name}
+                    console.log('Processing STUDENT task array:', data);
+                    totalTasks = data.length;
+                    doneTasks = data.filter(t => (t.status || '').toUpperCase() === 'DONE').length;
+                    inProgressTasks = data.filter(t => (t.status || '').toUpperCase() === 'IN_PROGRESS').length;
+                    notStartedTasks = data.filter(t => (t.status || '').toUpperCase() === 'NOT_STARTED').length;
+                    overallProgress = totalTasks > 0 ? (doneTasks * 100.0) / totalTasks : 0;
+                    console.log('Calculated STUDENT stats:', { totalTasks, doneTasks, inProgressTasks, notStartedTasks, overallProgress });
+                } else {
+                    // data is dashboard summary object from /api/tasks/dashboard/summary/*
+                    console.log('Processing MENTOR/ADMIN dashboard object:', data);
+                    totalTasks = data.totalTasks || 0;
+                    doneTasks = data.doneTasks || 0;
+                    inProgressTasks = data.inProgressTasks || 0;
+                    notStartedTasks = data.notStartedTasks || 0;
+                    overallProgress = data.overallprogress || 0;
+                }
+                
+                console.log('DASHBOARD VALUES:', 'totalTasks=' + totalTasks, 'doneTasks=' + doneTasks, 'inProgress=' + inProgressTasks, 'notStarted=' + notStartedTasks, 'progress=' + overallProgress);
+
+                const statsHtml = `
+                    <div class="card stat-box">
+                        <div class="stat-number">${totalTasks}</div>
+                        <div class="stat-label">Total Tasks</div>
+                    </div>
+                    <div class="card stat-box">
+                        <div class="stat-number">${doneTasks}</div>
+                        <div class="stat-label">Completed Tasks</div>
+                    </div>
+                    <div class="card stat-box">
+                        <div class="stat-number">${inProgressTasks}</div>
+                        <div class="stat-label">In Progress</div>
+                    </div>
+                    <div class="card stat-box">
+                        <div class="stat-number">${notStartedTasks}</div>
+                        <div class="stat-label">Not Started</div>
+                    </div>
+                    <div class="card">
+                        <div class="stat-label">Overall Progress</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${overallProgress}%"></div>
+                        </div>
+                        <div class="stat-number" style="font-size: 24px; margin-top: 10px;">${Math.round(overallProgress)}%</div>
+                    </div>
+                `;
+
+                console.log('Setting dashboardStats HTML, element:', document.getElementById('dashboardStats'));
+                document.getElementById('dashboardStats').innerHTML = statsHtml;
+                console.log('dashboardStats innerHTML set successfully');
+            } catch (error) {
+                console.error('Error loading summary:', error);
+                document.getElementById('dashboardStats').innerHTML = '<div class="card"><p style="text-align: center; color: var(--gray-500);">Unable to load summary</p></div>';
+            }
+        }
+
+        async function loadRecentTasks() {
+            try {
+                let url = `${API_BASE_URL}/tasks`;
+                
+                if (currentUser.role === 'STUDENT') {
+                    // Use name since tasks are assigned by name, not email
+                    const username = encodeURIComponent(currentUser.name || currentUser.email);
+                    url = `${API_BASE_URL}/tasks/user/${username}`;
+                }
+
+                const response = await fetch(url, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (!response.ok) throw new Error('Failed to load tasks');
+                const tasks = await response.json();
+
+                const tbody = document.getElementById('recentTasksBody');
+                
+                if (!tasks || tasks.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center">No tasks yet</td></tr>';
+                    return;
+                }
+
+                const recentTasks = tasks.slice(0, 5);
+                tbody.innerHTML = recentTasks.map(task => `
+                    <tr>
+                        <td>${task.title}</td>
+                        <td>${task.assignedTo}</td>
+                        <td>${task.priority || 'MEDIUM'}</td>
+                        <td>${formatDate(task.dueDate)}</td>
+                        <td>
+                            <span class="badge ${getStatusBadgeClass(task.status)}">
+                                ${task.status.replace(/_/g, ' ')}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-small" onclick="viewMeetingDetailsForTask(${task.id})" style="margin-right: 20px;">
+                                View
+                            </button>
+                            <button class="btn btn-primary btn-small" onclick="openUpdateTaskModal(${task.id})">
+                                Update
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading tasks:', error);
+            }
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = String(date.getFullYear()).slice(-2);
+            return `${day}/${month}/${year}`;
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('navbarMenu');
+            menu.classList.toggle('open');
+        }
+
+        function showSection(sectionName) {
+            const sections = ['dashboardSection', 'tasksSection', 'meetingsSection', 'meetingSummarySection', 'usersSection', 'aiApprovalSection'];
+            sections.forEach(section => {
+                document.getElementById(section).classList.add('hidden');
+            });
+
+            document.getElementById(sectionName + 'Section').classList.remove('hidden');
+
+            // Close mobile menu when a section is selected
+            const menu = document.getElementById('navbarMenu');
+            if (menu.classList.contains('open')) {
+                menu.classList.remove('open');
+            }
+
+            if (sectionName === 'dashboard') {
+                // Ensure dashboard data is refreshed when user clicks Dashboard
+                loadDashboardSummary();
+                loadRecentTasks();
+            } else if (sectionName === 'tasks') {
+                loadAllTasks();
+            } else if (sectionName === 'meetings') {
+                loadAllMeetings();
+            } else if (sectionName === 'meetingSummary') {
+                loadMeetingSummary();
+            } else if (sectionName === 'users') {
+                loadAllUsers();
+            } else if (sectionName === 'aiApproval') {
+                loadPendingAiTasks();
+            }
+        }
+
+        // ===== AI Task Functions =====
+
+        // ===== Task Functions =====
+        
+        // Helper function to format resources as clickable links
+     // ...existing code...
+function formatResourcesAsLinks(resourcesText) {
+    if (!resourcesText || resourcesText.trim() === '') {
+        return '<span style="color: #999;">No resources</span>';
+    }
+
+    const resources = resourcesText.split(',').map(r => r.trim()).filter(r => r);
+    if (resources.length === 0) return '<span style="color: #999;">No resources</span>';
+
+    return resources.map(resource => {
+        let url = resource;
+        // if resource looks like a domain (example.com) and missing protocol, prefix https://
+        if (!resource.startsWith('http://') && !resource.startsWith('https://') && /^[^\s]+\.[^\s]+$/.test(resource)) {
+            url = 'https://' + resource;
+        }
+        try {
+            const hostname = new URL(url).hostname;
+            return `<a href="${url}" target="_blank" style="color: #818cf8; text-decoration: none; margin-right: 8px;">📎 ${hostname}</a>`;
+        } catch (e) {
+            // fallback to search link
+            const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(resource)}`;
+            return `<a href="${searchUrl}" target="_blank" style="color: #818cf8; text-decoration: none; margin-right: 8px;">📎 ${resource}</a>`;
+        }
+    }).join('<br>');
+}
+// ...existing code...
+        async function loadAllTasks() {
+            try {
+                // Show AI processing banner if audio was uploaded recently (within 30 seconds)
+                const aiProcessingBanner = document.getElementById('aiProcessingBanner');
+                if (recentAudioUploadTime && (Date.now() - recentAudioUploadTime) < 30000) {
+                    if (aiProcessingBanner) aiProcessingBanner.style.display = 'block';
+                } else {
+                    if (aiProcessingBanner) aiProcessingBanner.style.display = 'none';
+                }
+
+                let url = `${API_BASE_URL}/tasks`;
+                
+                if (currentUser.role === 'STUDENT') {
+                    const username = encodeURIComponent(currentUser.name || currentUser.email);
+                    url = `${API_BASE_URL}/tasks/user/${username}`;
+                } else if (currentUser.role === 'MENTOR') {
+                    // Mentors see only their own tasks (from their meetings)
+                    url = `${API_BASE_URL}/tasks`;
+                } else if (currentUser.role === 'ADMIN') {
+                    // Admins see all tasks
+                    url = `${API_BASE_URL}/tasks/admin/all`;
+                }
+
+                console.log('Loading tasks from:', url);
+                
+                const response = await fetch(url, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                console.log('Tasks response status:', response.status);
+
+                if (!response.ok) {
+                    let errText = '';
+                    try {
+                        errText = await response.text();
+                    } catch (e) {
+                        errText = `Status ${response.status}`;
+                    }
+                    console.error('Tasks error body:', errText);
+                    throw new Error('Failed to load tasks: ' + errText);
+                }
+
+                const tasks = await response.json();
+                
+                console.log('Tasks loaded:', tasks);
+
+                const tbody = document.getElementById('tasksTableBody');
+                
+                if (!tasks || tasks.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center">No tasks found</td></tr>';
+                    return;
+                }
+
+
+                // Hide team-level task when there exists any approved individual task with same title + meetingType
+                // Build a set of keys for approved individual tasks: `${meetingType}||${title.toLowerCase()}`
+                const approvedIndividualKeys = new Set();
+                tasks.forEach(t => {
+                    if (!t) return;
+                    const isTeamType = (t.meetingType || '').toUpperCase() === 'TEAM';
+                    const assigned = t.assignedTo || '';
+                    const title = (t.title || '').trim().toLowerCase();
+                    // Consider individual task when assignedTo does not look like a team (heuristic: contains '@' or has spaces with capitals)
+                    const looksLikeTeam = assigned && !assigned.includes('@') && /^[A-Za-z0-9\- ]+$/.test(assigned) && assigned.toUpperCase().includes('TEAM');
+                    const isIndividual = isTeamType && assigned && !looksLikeTeam;
+                    if (isIndividual && t.approved) {
+                        approvedIndividualKeys.add(`${(t.meetingType||'').toUpperCase()}||${title}`);
+                    }
+                });
+
+                const filteredTasks = tasks.filter(task => {
+                    if (!task) return false;
+                    const titleKey = `${(task.meetingType||'').toUpperCase()}||${(task.title||'').trim().toLowerCase()}`;
+                    const assigned = task.assignedTo || '';
+                    const isTeamTask = (task.meetingType || '').toUpperCase() === 'TEAM' && assigned && !assigned.includes('@') && assigned.toUpperCase().includes('TEAM');
+                    // If this is a team-level task and an approved individual version exists, hide it
+                    if (isTeamTask && approvedIndividualKeys.has(titleKey)) return false;
+                    return true;
+                });
+
+                tbody.innerHTML = filteredTasks.map(task => {
+                    let actions = `
+<button class="btn btn-primary btn-small"
+    onclick="viewMeetingDetailsForTask(${task.id})"
+    style="margin-right: 20px;">View</button>
+
+${task.status !== 'CANCELLED' ? `
+<button class="btn btn-primary btn-small"
+    onclick="openUpdateTaskModal(${task.id})">
+    Update Status
+</button>
+
+<button class="btn btn-danger btn-small"
+    onclick="cancelTask(${task.id})"
+    style="margin-left:10px;">
+    Cancel
+</button>
+` : `
+<span class="badge badge-danger">Cancelled</span>
+`}
+`;
+                    return `
+<tr style="${task.meetingType === 'TEAM' ? 'background-color: #e0f2fe; border-left: 4px solid #0284c7;' : ''}">
+<td>${task.title} ${task.meetingType === 'TEAM' ? '<span class="badge" style="background-color: #0284c7; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; margin-left: 8px; font-weight: 600;">TEAM</span>' : '<span class="badge" style="background-color: #64748b; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; margin-left: 8px; font-weight: 600;">SOLO</span>'}</td>
+<td>${!task.approved && task.autoGenerated ? 'Pending Approval' : (task.assignedTo || '—')}</td>
+<td>${task.priority || 'MEDIUM'}</td>
+<td>${formatDate(task.dueDate)}</td>
+<td>
+<span class="badge ${task.status === 'CANCELLED' ? 'badge-danger' : getStatusBadgeClass(task.status)}">
+${task.status === 'CANCELLED' ? 'CANCELLED' : (task.status||'').replace(/_/g, ' ')}
+</span>
+</td>
+<td>${formatResourcesAsLinks(task.resources)}</td>
+<td>${actions}</td>
+</tr>
+`;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading tasks:', error);
+            }
+        }
+
+        async function loadPendingAiTasks() {
+            try {
+                // Fetch all tasks and filter for pending Task Approval
+                const response = await fetch(`${API_BASE_URL}/tasks`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load tasks');
+                }
+
+                const tasks = await response.json();
+                const pendingAiTasks = tasks.filter(task => task.autoGenerated && !task.approved);
+
+                const tbody = document.getElementById('aiApprovalTableBody');
+
+                if (!pendingAiTasks || pendingAiTasks.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center">No Task Approval pending approval</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = pendingAiTasks.map(task => `
+                    <tr>
+                        <td>${task.title}</td>
+                        <td>${task.assignedTo}</td>
+                        <td>${task.priority || 'MEDIUM'}</td>
+                        <td>${formatDate(task.dueDate)}</td>
+                        <td>${formatResourcesAsLinks(task.resources)}</td>
+                        <td>
+                            <button class="btn btn-secondary btn-small" onclick="openEditAiTaskModal(${task.id})" style="margin-right: 5px;">Edit</button>
+                            <button class="btn btn-success btn-small" onclick="approveAiTask(${task.id})" style="margin-right: 5px;">Approve</button>
+                            <button class="btn btn-danger btn-small" onclick="deleteAiTask(${task.id})">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                // Update notification badge
+                const badge = document.getElementById('taskApprovalBadge');
+                if (badge) {
+                    badge.textContent = pendingAiTasks.length;
+                    badge.style.display = pendingAiTasks.length > 0 ? 'inline-block' : 'none';
+                }
+
+                // Show notification if there are pending tasks
+                if (pendingAiTasks.length > 0) {
+                    showToast(`You have ${pendingAiTasks.length} task(s) pending approval`, 'warning', 10000);
+                }
+            } catch (error) {
+                console.error('Error loading pending Task Approval:', error);
+                document.getElementById('aiApprovalTableBody').innerHTML = '<tr><td colspan="6" class="text-center">Error loading Task Approval</td></tr>';
+            }
+        }
+
+        function openNewTaskModal() {
+            document.getElementById('newTaskModal').classList.add('active');
+            loadMOMOptions();
+            loadUserListForTask('taskAssignedTo', 'STUDENT');
+        }
+
+        // ...existing code...
+async function loadMOMOptions() {
+    try {
+        const select = document.getElementById('momId');
+        select.innerHTML = '<option value="">Select a MOM...</option>';
+
+        let meetings = [];
+
+        if (currentUser.role === 'MENTOR') {
+            const res = await fetch(`${API_BASE_URL}/meetings/my`, {
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+            if (res && res.ok) meetings = await res.json();
+            else {
+                console.error('Failed to load meetings:', res && res.status);
+            }
+        }
+
+        if (!meetings || meetings.length === 0) {
+            select.innerHTML = '<option value="">No meetings available</option>';
+            return;
+        }
+
+        // For each meeting, try to fetch its MOM and add option only when MOM exists
+        let anyMom = false;
+        for (const m of meetings) {
+            try {
+                const momRes = await fetch(`${API_BASE_URL}/meetings/${m.id}/mom`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (!momRes.ok) {
+                    // no MOM for this meeting — skip adding option
+                    continue;
+                }
+
+                const momData = await momRes.json();
+                const opt = document.createElement('option');
+                opt.value = momData.id; // <-- MOM id (required by backend)
+                opt.textContent = `${m.title} — ${formatDate(m.meetingdate)}${momData.momtext ? ' (MOM available)' : ' (MOM available)'}`;
+                select.appendChild(opt);
+                anyMom = true;
+            } catch (e) {
+                console.warn('Failed to fetch MOM for meeting', m.id, e);
+            }
+        }
+
+        if (!anyMom) {
+            select.innerHTML = '<option value="">No MOMs found — add MOM to a meeting first</option>';
+        }
+    } catch (error) {
+        console.error('Error loading meetings for task creation:', error);
+        const select = document.getElementById('momId');
+        if (select) select.innerHTML = '<option value="">Error loading meetings</option>';
+    }
+}
+// Robust create-task handler: validates input, posts to backend and reloads lists
+async function handleCreateTask(e) {
+    e.preventDefault();
+    try {
+        const momId = document.getElementById('momId') ? document.getElementById('momId').value : '';
+        const title = document.getElementById('taskTitle') ? document.getElementById('taskTitle').value.trim() : '';
+        const assignedTo = document.getElementById('taskAssignedTo') ? document.getElementById('taskAssignedTo').value : '';
+        const priority = document.getElementById('taskPriority') ? document.getElementById('taskPriority').value : null;
+        const dueDateRaw = document.getElementById('taskDueDate') ? document.getElementById('taskDueDate').value : '';
+
+        if (!momId) return showError('taskFormError', 'Please select a MOM before creating a task');
+        if (!title) return showError('taskFormError', 'Title is required');
+        if (!assignedTo) return showError('taskFormError', 'Assignee is required');
+
+        // Normalize dueDate to ISO if date/time provided
+        let dueDate = null;
+        if (dueDateRaw) {
+            try {
+                // input type may be datetime-local or date
+                if (/^\d{4}-\d{2}-\d{2}$/.test(dueDateRaw)) {
+                    dueDate = new Date(dueDateRaw + 'T17:00:00').toISOString();
+                } else {
+                    dueDate = new Date(dueDateRaw).toISOString();
+                }
+            } catch (err) {
+                console.warn('Could not parse dueDate:', dueDateRaw, err);
+            }
+        }
+
+        const payload = { title, assignedTo };
+        if (priority) payload.priority = priority;
+        if (dueDate) payload.dueDate = dueDate;
+
+        const res = await fetch(`${API_BASE_URL}/tasks/mom/${encodeURIComponent(momId)}`, {
+            method: 'POST',
+            headers: Object.assign({ 'Content-Type': 'application/json' }, authToken ? { 'Authorization': `Bearer ${authToken}` } : {}),
+            body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+            let errMsg = `Status ${res.status}`;
+            try {
+                const body = await res.json();
+                errMsg = body.message || body.error || JSON.stringify(body);
+            } catch (e) {
+                try { errMsg = await res.text(); } catch (e2) { /* ignore */ }
+            }
+            throw new Error(errMsg || 'Failed to create task');
+        }
+
+        // success
+        showSuccess('', 'Task created successfully');
+        closeModal('newTaskModal');
+
+        // Force fresh reloads and wait
+        await loadAllTasks();
+        await loadRecentTasks();
+        await loadDashboardSummary();
+
+    } catch (err) {
+        console.error('Create task error:', err);
+        showError('taskFormError', err.message || 'Error creating task');
+    }
+}
+// ...existing code...
+        function openUpdateTaskModal(taskId) {
+            currentEditingTaskId = taskId;
+            document.getElementById('updateTaskModal').classList.add('active');
+        }
+
+        // ===== AI Task Approval Handler =====
+        async function approveAiTask(taskId) {
+            try {
+                // Optimistically update badge
+                const badge = document.getElementById('taskApprovalBadge');
+                if (badge) {
+                    const currentCount = parseInt(badge.textContent) || 0;
+                    if (currentCount > 0) {
+                        badge.textContent = Math.max(0, currentCount - 1);
+                        if (currentCount - 1 <= 0) {
+                            badge.style.display = 'none';
+                        }
+                    }
+                }
+
+                const response = await fetch(`${API_BASE_URL}/tasks/${taskId}/approve`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to approve task');
+                }
+
+                showSuccess('', 'Task approved successfully!');
+                loadPendingAiTasks();
+                loadAllTasks();
+                loadRecentTasks();
+                loadDashboardSummary();
+            } catch (error) {
+                console.error('Approve task error:', error);
+                // Revert optimistic update on error
+                loadPendingAiTasks();
+                showError('', error.message || 'Failed to approve task');
+            }
+        }
+
+        async function deleteAiTask(taskId) {
+            const confirmed = await showConfirm('Are you sure you want to delete this AI task? This action cannot be undone.');
+            if (!confirmed) {
+                return;
+            }
+
+            try {
+                // Optimistically update badge
+                const badge = document.getElementById('taskApprovalBadge');
+                if (badge) {
+                    const currentCount = parseInt(badge.textContent) || 0;
+                    if (currentCount > 0) {
+                        badge.textContent = Math.max(0, currentCount - 1);
+                        if (currentCount - 1 <= 0) {
+                            badge.style.display = 'none';
+                        }
+                    }
+                }
+
+                const response = await fetch(`${API_BASE_URL}/tasks/${taskId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to delete task');
+                }
+
+                showToast('AI task deleted successfully!', 'success', 4000);
+                loadPendingAiTasks();
+                loadAllTasks();
+            } catch (error) {
+                console.error('Delete task error:', error);
+                // Revert optimistic update on error
+                loadPendingAiTasks();
+                showToast(error.message || 'Failed to delete task', 'error', 4000);
+            }
+        }
+
+async function openEditAiTaskModal(taskId) {
+    try {
+        // set current editing id
+        currentEditingTaskId = taskId;
+        const modal = document.getElementById('editAiTaskModal');
+        if (!modal) {
+            console.error('openEditAiTaskModal: editAiTaskModal not found in DOM');
+            return;
+        }
+
+        // canonical selectors for the static modal in the page
+        const titleEl = modal.querySelector('#editTaskTitle');
+        const assignedEl = modal.querySelector('#editTaskAssignedTo') || modal.querySelector('#editTaskAssigned');
+        const resourcesEl = modal.querySelector('#editTaskResourcesLinks') || modal.querySelector('#editTaskResources');
+        const deadlineEl = modal.querySelector('#editTaskDueDate') || modal.querySelector('#editTaskDeadline');
+        const urgentEl = modal.querySelector('#editTaskUrgent');
+
+        if (!titleEl || !assignedEl || !resourcesEl) {
+            console.error('openEditAiTaskModal: required modal elements missing', { titleEl, assignedEl, resourcesEl });
+            return;
+        }
+
+        // populate assigned-to select with users before showing task data
+        try { await loadUserListForTask('editTaskAssignedTo', 'STUDENT'); } catch (e) { /* ignore */ }
+
+        // fetch using configured API base (include auth header when available)
+        fetch(`${API_BASE_URL}/tasks/${taskId}`, {
+            headers: Object.assign({ 'Accept': 'application/json' }, authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+        })
+            .then(async res => {
+                if (!res.ok) {
+                    const txt = await res.text().catch(() => '');
+                    console.error('openEditAiTaskModal fetch failed:', res.status, txt);
+                    // show backend error message when present
+                    if (res.status === 401) throw new Error('Unauthorized. Please log in.');
+                    if (res.status === 403) throw new Error(txt || 'Forbidden. You do not have access to this task.');
+                    throw new Error(txt || ('Fetch failed: ' + res.status));
+                }
+                return res.json();
+            })
+            .then(task => {
+                if ('value' in titleEl) titleEl.value = task.title || '';
+                else titleEl.textContent = task.title || '';
+                assignedEl.value = task.assignedTo || '';
+                if (resourcesEl) resourcesEl.innerHTML = formatResourcesAsLinks(task.resources);
+                // Ensure due date input is present and editable, set to task date if provided
+                if (deadlineEl) {
+                    deadlineEl.disabled = false;
+                    deadlineEl.value = task.dueDate ? new Date(task.dueDate).toISOString().slice(0,10) : '';
+                }
+                // Ensure priority select reflects the task priority and is editable
+                const priorityEl = modal.querySelector('#editTaskPriority');
+                if (priorityEl) {
+                    priorityEl.disabled = false;
+                    try { priorityEl.value = (task.priority || '').toUpperCase() || 'MEDIUM'; } catch (e) { /* ignore */ }
+                }
+                if (urgentEl) urgentEl.checked = !!task.urgent;
+                modal.classList.add('active');
+            })
+            .catch(err => {
+                console.error('openEditAiTaskModal fetch error:', err);
+                showError('editAiTaskError', err.message || 'Failed to load task for editing');
+            });
+
+    } catch (e) {
+        console.error('openEditAiTaskModal error:', e);
+    }
+}
+
+
+        // ...existing code...
+// ...existing code...
+async function handleEditAiTask(e) {
+    e.preventDefault();
+    const title = document.getElementById('editTaskTitle').value;
+    const assignedTo = document.getElementById('editTaskAssignedTo').value;
+    if (!title || !assignedTo) { return showError('editAiTaskError','All fields are required'); }
+    try {
+        if (!authToken) { return showError('editAiTaskError','You must be logged in to edit tasks'); }
+
+        let dueDate = document.getElementById('editTaskDueDate')?.value || null;
+        if (dueDate && /^\d{4}-\d{2}-\d{2}$/.test(dueDate)) dueDate = dueDate + 'T17:00:00';
+
+        const priority = document.getElementById('editTaskPriority')?.value || null;
+        const urgent = !!document.getElementById('editTaskUrgent')?.checked;
+
+        const payload = { title, assignedTo };
+        if (dueDate) payload.dueDate = dueDate;
+        if (priority) payload.priority = priority;
+        payload.urgent = urgent;
+
+        const response = await fetch(`${API_BASE_URL}/tasks/${currentEditingTaskId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            const txt = await response.text().catch(()=>'');
+            throw new Error(txt || 'Failed to update task');
+        }
+
+        showSuccess('','AI Task updated successfully!');
+        closeModal('editAiTaskModal');
+
+        // WAIT for fresh reloads
+        await loadAllTasks();
+        await loadRecentTasks();
+        await loadDashboardSummary();
+
+    } catch (error) {
+        console.error('handleEditAiTask error:', error);
+        showError('editAiTaskError', error.message || 'Failed to update task');
+    }
+}
+// ...existing code...// ...existing code...
+        async function handleUpdateTaskStatus(e) {
+            e.preventDefault();
+            const status = document.getElementById('taskStatusSelect').value;
+
+            if (!currentEditingTaskId) {
+                showError('updateTaskError', 'No task selected');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/tasks/${currentEditingTaskId}/status?status=${status}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Failed to update task status');
+                }
+
+                closeModal('updateTaskModal');
+                loadAllTasks();
+                loadRecentTasks();
+                loadDashboardSummary();
+                showSuccess('', 'Task updated successfully!');
+            } catch (error) {
+                showError('updateTaskError', error.message);
+            }
+        }
+
+        // Function for students to view meeting details (now backend returns meeting + MOM)
+        async function viewMeetingDetailsForTask(taskId) {
+            try {
+                console.log('Fetching meeting details for task:', taskId);
+                const res = await fetch(`${API_BASE_URL}/tasks/${taskId}/meeting`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                console.log('Meeting response status:', res.status, res.statusText);
+
+                if (!res.ok) {
+                    let msg = 'Could not fetch meeting details';
+                    try { 
+                        const body = await res.json(); 
+                        if (body && body.message) msg = body.message;
+                        console.error('Meeting error response:', body);
+                    } catch(e){
+                        const errText = await res.text();
+                        console.error('Meeting error text:', errText);
+                    }
+                    showError('', msg);
+                    return;
+                }
+
+                const data = await res.json();
+                console.log('Meeting data:', data);
+
+                // Backend may return MeetingWithMomResponseDto (id,title,meetingdate,momId,momText)
+                const meetingId = data.id || data.meetingId || null;
+                const title = data.title || data.meetingTitle || 'N/A';
+                const meetingDate = data.meetingdate || data.meetingDate || null;
+                const momText = data.momText || data.momtext || 'No meeting minutes available yet';
+
+                const details = `
+                    <h3>Meeting: ${title}</h3>
+                    <p><strong>Date:</strong> ${formatDate(meetingDate)}</p>
+                    <hr/>
+                    <h4>Meeting Minutes:</h4>
+                   <div style="
+                      max-height: 300px;
+                      overflow-y: auto;
+                      padding: 12px;
+                      border: 1px solid #e2e8f0;
+                      border-radius: 8px;
+                      background: #f8fafc;
+                      white-space: pre-wrap;
+                    ">
+                     ${momText || 'No meeting minutes available yet'}
+                    </div>
+
+                `;
+
+                document.getElementById('viewMeetingContent').innerHTML = details;
+                document.getElementById('viewMeetingModal').classList.add('active');
+            } catch (error) {
+                console.error('Error fetching meeting details:', error);
+                showError('', 'Error loading meeting details');
+            }
+        }
+
+        // ===== Meeting Functions =====
+        async function loadAllMeetings() {
+            try {
+                const tbody = document.getElementById('meetingsTableBody');
+                let meetings = null;
+
+                // For MENTOR role: use /meetings/my to get only their own meetings
+                // For STUDENT role: meetings are accessed through tasks
+                if (!currentUser || currentUser.role !== 'MENTOR') {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center">Meetings are viewed through your assigned tasks</td></tr>';
+                    return;
+                }
+
+                const endpoint = `${API_BASE_URL}/meetings/my`;
+                console.log('Loading meetings from:', endpoint);
+                console.log('Current user:', currentUser);
+                console.log('Auth token:', authToken ? 'Present' : 'Missing');
+                
+                const res = await fetch(endpoint, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                console.log('Response status:', res.status, res.statusText);
+                console.log('Response headers:', res.headers);
+
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    console.error('Failed to fetch meetings:', res.status, res.statusText, errorText);
+                    tbody.innerHTML = `<tr><td colspan="4" class="text-center">Error: ${res.status} - ${errorText}</td></tr>`;
+                    return;
+                }
+
+                meetings = await res.json();
+                console.log('Raw meetings response:', meetings);
+                console.log('Meetings count:', meetings ? meetings.length : 0);
+                console.log('Meetings structure:', JSON.stringify(meetings, null, 2));
+
+                if (!Array.isArray(meetings)) {
+                    console.error('Meetings is not an array:', typeof meetings);
+                    meetings = [];
+                }
+
+                if (meetings.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center">No meetings found. Create a new meeting to get started.</td></tr>';
+                    return;
+                }
+
+                // Fetch progress for each meeting in parallel
+                const progressPromises = meetings.map(m => {
+                    console.log('Fetching progress for meeting:', m.id, m.title);
+                    return fetch(`${API_BASE_URL}/meetings/progress/meeting/${m.id}`, {
+                        headers: { 'Authorization': `Bearer ${authToken}` }
+                    })
+                    .then(r => {
+                        if (!r.ok) {
+                            console.warn('Progress fetch failed for meeting', m.id, ':', r.status);
+                            return 0;
+                        }
+                        return r.json();
+                    })
+                    .catch(err => {
+                        console.error('Error fetching progress for meeting', m.id, ':', err);
+                        return 0;
+                    });
+                });
+                
+                const progresses = await Promise.all(progressPromises);
+                console.log('Progresses:', progresses);
+
+                tbody.innerHTML = meetings.map((m, idx) => {
+                    console.log(`Rendering meeting ${idx}:`, m.title, 'Progress:', progresses[idx]);
+                    const hasMOM = m.momText || m.momtext;
+                    const audioUploadHTML = `
+                        <div style="margin-bottom: 8px; display: flex; gap: 8px; align-items: center;">
+                            <input type="file" id="audioFile_${m.id}" accept="audio/*" style="font-size: 14px; flex: 1; border: 1px solid #a78bfa; border-radius: 8px; padding: 8px; background: #f8fafc;" />
+                            <button id="uploadBtn_${m.id}" class="btn btn-primary btn-small" onclick="handleAudioUpload(${m.id})" style="white-space: nowrap; background: linear-gradient(90deg, #818cf8 0%, #a78bfa 100%); border: none; border-radius: 8px; font-weight: 600; letter-spacing: 0.5px;">Upload Audio</button>
+                        </div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button class="btn btn-success btn-small" onclick="openAddMOMModalFor(${m.id})" style="white-space: nowrap; background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%); border: none; border-radius: 8px; font-weight: 600; letter-spacing: 0.5px;">Add MoM Manually</button>
+                           <button class="btn btn-danger btn-small" onclick="deleteMeeting(${m.id})">Delete</button>
+                        </div>
+                    `;
+                    return `
+                    <tr>
+                        <td>${m.title || 'N/A'}</td>
+                        <td>${formatDate(m.meetingdate)}</td>
+                        <td>
+                            <div style="width:160px">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${Math.round(progresses[idx] || 0)}%"></div>
+                                </div>
+                                <div style="margin-top:8px; font-weight:600;">${Math.round(progresses[idx] || 0)}%</div>
+                            </div>
+                        </td>
+                        <td>
+                            ${audioUploadHTML}
+                        </td>
+                    </tr>
+                `;
+                }).join('');
+                
+                console.log('Meetings table rendered successfully');
+            } catch (error) {
+                console.error('Error loading meetings:', error);
+                console.error('Error stack:', error.stack);
+                const tbody = document.getElementById('meetingsTableBody');
+                if (tbody) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="text-center">Error loading meetings: ${error.message}</td></tr>`;
+                }
+            }
+        }
+
+        async function loadMeetingSummary() {
+            try {
+                const container = document.getElementById('meetingSummaryContainer');
+                container.innerHTML = '<div class="text-center" style="padding: 40px 20px;">Loading meeting summary...</div>';
+                
+                // Check if currentUser is available
+                if (!currentUser) {
+                    console.error('currentUser is not available', { currentUser, authToken: authToken ? 'present' : 'missing' });
+                    container.innerHTML = '<div class="text-center" style="padding: 40px 20px; color: var(--gray-500);">User not logged in. Please refresh the page.</div>';
+                    return;
+                }
+
+                let endpoint = '';
+                
+                if (currentUser.role === 'MENTOR') {
+                    // For mentors: get all their meetings with details
+                    endpoint = `${API_BASE_URL}/meetings/summary`;
+                    console.log('Loading mentor meetings from:', endpoint);
+                } else if (currentUser.role === 'STUDENT') {
+                    // For students: get meetings where they are assigned tasks
+                    const username = encodeURIComponent(currentUser.name || currentUser.email);
+                    endpoint = `${API_BASE_URL}/meetings/summary/student/${username}`;
+                    console.log('Loading student meetings from:', endpoint);
+                } else {
+                    console.error('Unknown user role:', currentUser.role);
+                    container.innerHTML = '<div class="text-center" style="padding: 40px 20px; color: var(--gray-500);">Access denied - unknown user role</div>';
+                    return;
+                }
+
+                const response = await fetch(endpoint, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                console.log('Meeting summary response status:', response.status);
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Failed to load meeting summary:', response.status, errorText);
+                    throw new Error(`Failed to load: ${response.status} - ${errorText}`);
+                }
+
+                const meetings = await response.json();
+                console.log('Meetings data:', meetings);
+
+                if (!meetings || meetings.length === 0) {
+                    container.innerHTML = '<div class="text-center" style="padding: 40px 20px; color: var(--gray-500);">No meetings found</div>';
+                    return;
+                }
+
+                container.innerHTML = meetings.map(meeting => `
+                    <div style="background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid ${meeting.meetingType === 'TEAM' ? '#0284c7' : '#64748b'};">
+                        <!-- Header -->
+                        <div style="margin-bottom: 16px;">
+                            <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 700; color: var(--dark-color);">
+                                ${meeting.title}
+                                <span style="background-color: ${meeting.meetingType === 'TEAM' ? '#0284c7' : '#64748b'}; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; margin-left: 10px; font-weight: 600;">${meeting.meetingType}</span>
+                            </h3>
+                            <p style="margin: 0; color: var(--gray-500); font-size: 14px;">📅 ${formatDate(meeting.meetingDate)}</p>
+                        </div>
+
+                        <!-- Minutes of Meeting -->
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 700; color: var(--dark-color);">📝 Minutes of Meeting</h4>
+                            <div style="background-color: #f8fafc; border: 1px solid var(--gray-200); border-radius: 8px; padding: 14px; max-height: 250px; overflow-y: auto; white-space: pre-wrap; word-wrap: break-word; font-size: 13px; color: var(--dark-color); line-height: 1.6;">
+                                ${meeting.momText || 'No minutes recorded'}
+                            </div>
+                        </div>
+
+                        <!-- Audio Files -->
+                        <div style="margin-bottom: ${meeting.meetingType === 'TEAM' ? '20px' : '0'};">
+                            <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 700; color: var(--dark-color);">🎙️ Meeting Audio</h4>
+                            <div>
+                                ${meeting.audioFiles && meeting.audioFiles.length > 0 ? 
+                                    meeting.audioFiles.map(audio => `
+                                        <div style="background-color: #f1f5f9; border-radius: 8px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                                            <div>
+                                                <div style="font-size: 12px; color: var(--gray-500);">Uploaded: ${formatDate(audio.uploadedAt)}</div>
+                                            </div>
+                                            <button class="btn btn-primary btn-small" onclick="playAudio('${audio.filePath}', '${audio.fileName}')" style="white-space: nowrap;">▶️ Play</button>
+                                        </div>
+                                    `).join('')
+                                    : 
+                                    '<div style="color: var(--gray-500); font-size: 14px;">No audio files uploaded</div>'
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Teams Section (only for TEAM meetings) -->
+                        ${meeting.meetingType === 'TEAM' && meeting.teams && meeting.teams.length > 0 ? `
+                            <div style="border-top: 1px solid var(--gray-200); padding-top: 16px;">
+                                <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 700; color: var(--dark-color);">👥 Teams</h4>
+                                ${meeting.teams.map(team => `
+                                    <div style="background-color: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+                                        <div style="font-weight: 600; font-size: 14px; color: var(--dark-color); margin-bottom: 8px;">🏆 ${team.name}</div>
+                                        <div style="font-size: 12px; color: var(--dark-color);">
+                                            <strong>Participants:</strong> 
+                                            ${team.participants && team.participants.length > 0 ? 
+                                                team.participants.join(', ') 
+                                                : 
+                                                'No participants'
+                                            }
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading meeting summary:', error);
+                const container = document.getElementById('meetingSummaryContainer');
+                const errorMsg = error.message || 'Unknown error';
+                const debugMsg = `
+                    <div style="padding: 40px 20px; color: var(--gray-500); text-align: left; max-width: 600px; margin: 0 auto;">
+                        <h3 style="color: var(--danger-color); margin-bottom: 16px;">⚠️ Error loading meeting summary</h3>
+                        <p><strong>Error:</strong> ${errorMsg}</p>
+                        <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--gray-200);">
+                        <p style="font-size: 13px; margin-bottom: 8px;"><strong>Debugging steps:</strong></p>
+                        <ol style="font-size: 13px; margin: 0; padding-left: 20px;">
+                            <li>Check backend logs for the endpoint: <code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">/meetings/summary</code></li>
+                            <li>Verify the backend service is running on ${API_BASE_URL}</li>
+                            <li>Check if your role (${currentUser?.role || 'unknown'}) is authorized to access this endpoint</li>
+                            <li>Open DevTools (F12) → Console to see full error details</li>
+                        </ol>
+                    </div>
+                `;
+                container.innerHTML = debugMsg;
+            }
+        }
+
+        function playAudio(filePath, fileName) {
+
+    const audioUrl = `http://localhost:8080/uploads/audio/${fileName}`;
+
+    console.log("Playing from:", audioUrl); // Debug
+
+    const audioModal = document.createElement('div');
+    audioModal.className = 'modal active';
+    audioModal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;';
+
+    audioModal.innerHTML = `
+        <div class="modal-content" style="max-width: 500px; width: 90%; border-radius: 12px;">
+            <div class="modal-header">
+                <button class="close-btn" onclick="this.closest('.modal').remove()">&times;</button>
+                <h2 class="modal-title">Meeting Audio</h2>
+            </div>
+            <div class="modal-body">
+                <audio controls style="width: 100%; margin-bottom: 16px;">
+                    <source src="${audioUrl}" type="audio/ogg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(audioModal);
+}
+        function openNewMeetingModal() {
+            document.getElementById('newMeetingModal').classList.add('active');
+            setCurrentDateTimeForMeeting();
+            document.getElementById('meetingType').value = 'SOLO';
+            document.getElementById('teamSetupSection').style.display = 'none';
+            document.getElementById('numTeams').value = 1;
+            document.getElementById('teamsInputs').innerHTML = '';
+        }
+
+
+        async function deleteMeeting(meetingId, meetingTitle) {
+            const confirmed = await showConfirm("Are you sure you want to delete this meeting?");
+            if (!confirmed) return;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/meetings/${meetingId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Failed to delete meeting');
+                }
+
+                showSuccess('', 'Meeting deleted successfully!');
+                loadAllMeetings();
+                loadPendingAiTasks(); // Refresh Task Approval badge after meeting deletion
+            } catch (error) {
+                showError('', error.message);
+            }
+        }
+
+        async function handleCreateMeeting(e) {
+            e.preventDefault();
+            const title = document.getElementById('meetingTitle').value;
+            const meetingDate = document.getElementById('meetingDate').value;
+            const type = document.getElementById('meetingType').value;
+
+            let teams = [];
+            if (type === 'TEAM') {
+                const numTeams = parseInt(document.getElementById('numTeams').value, 10) || 1;
+                for (let i = 0; i < numTeams; i++) {
+                    const teamNameInput = document.getElementById(`teamName_${i}`);
+                    const teamParticipantsSelect = document.getElementById(`teamParticipants_${i}`);
+                    
+                    if (!teamNameInput || !teamNameInput.value.trim()) {
+                        showError('meetingFormError', `Team ${i+1} name is required`);
+                        return;
+                    }
+                    
+                    const name = teamNameInput.value.trim();
+                    const participants = Array.from(teamParticipantsSelect.selectedOptions).map(opt => opt.value);
+                    
+                    if (participants.length === 0) {
+                        showError('meetingFormError', `Team ${i+1} must have at least one participant`);
+                        return;
+                    }
+                    
+                    teams.push({ name, participants });
+                }
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/meetings`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        title,
+                        meetingdate: meetingDate,
+                        type,
+                        teams
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.title || error.meetingdate || error.message || 'Failed to create meeting');
+                }
+
+                const meeting = await response.json();
+                currentMeetingId = meeting.id;
+                
+                closeModal('newMeetingModal');
+                document.getElementById('meetingForm').reset();
+                loadAllMeetings();
+                
+                showSuccess('', 'Meeting created successfully!');
+            } catch (error) {
+                showError('meetingFormError', error.message);
+            }
+        }
+
+        function openAddMOMModal() {
+            document.getElementById('addMOMModal').classList.add('active');
+        }
+
+        // Open Add MOM modal for a specific meeting id
+        function openAddMOMModalFor(meetingId) {
+            currentMeetingId = meetingId;
+            document.getElementById('addMOMModal').classList.add('active');
+        }
+
+        async function handleAddMOM(e) {
+            e.preventDefault();
+            const momText = document.getElementById('momText').value;
+
+            if (!currentMeetingId) {
+                showError('momFormError', 'No meeting selected');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/meetings/${currentMeetingId}/mom`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({ momtext: momText })
+                });
+
+                if (!response.ok) {
+                    let errorMessage = 'Failed to save MOM';
+                    try {
+                        const errorData = await response.json();
+                        errorMessage = errorData.momtext || errorData.message || errorMessage;
+                    } catch (e) {
+                        errorMessage = `Error: ${response.status} ${response.statusText}`;
+                    }
+                    throw new Error(errorMessage);
+                }
+
+                const savedMom = await response.json();
+                closeModal('addMOMModal');
+                document.getElementById('momForm').reset();
+                currentMeetingId = null;
+                
+                // Reload meetings to show updated progress
+                if (document.getElementById('meetingsTableBody')) {
+                    await loadAllMeetings();
+                }
+                
+                showSuccess('', 'Meeting minutes saved successfully!');
+            } catch (error) {
+                console.error('Error adding MOM:', error);
+                showError('momFormError', error.message);
+            }
+        }
+
+        // ===== User Functions =====
+        async function loadCurrentUserProfile() {
+            try {
+                if (!currentUser || !currentUser.email) {
+                    console.warn('loadCurrentUserProfile: no currentUser or email');
+                    return;
+                }
+                const res = await fetch(`${API_BASE_URL}/users/getuser`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                console.log('loadCurrentUserProfile response status:', res.status);
+                
+                if (!res.ok) {
+                    console.warn('loadCurrentUserProfile: response not ok');
+                    return;
+                }
+                
+                const users = await res.json();
+                console.log('All users:', users);
+                
+                const me = users.find(u => u.email === currentUser.email);
+                console.log('Found user:', me);
+                
+                if (me && me.name) {
+                    currentUser.name = me.name;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    console.log('Set currentUser.name to:', currentUser.name);
+                } else {
+                    console.warn('User not found or no name, keeping email fallback');
+                }
+            } catch (err) {
+                console.error('Failed to load current user profile', err);
+            }
+        }
+
+        async function loadAllUsers() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/users/getuser`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (!response.ok) throw new Error('Failed to load users');
+                const users = await response.json();
+
+                const tbody = document.getElementById('usersTableBody');
+                
+                if (!users || users.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center">No users found</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = users.map(user => `
+                    <tr>
+                        <td>#${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>
+                            <span class="badge ${user.role === 'MENTOR' ? 'badge-warning' : 'badge-info'}">
+                                ${user.role}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
+        // ===== Utility Functions =====
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function showError(elementId, message) {
+            if (elementId) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.textContent = message;
+                    element.style.display = 'block';
+                    setTimeout(() => element.style.display = 'none', 4000);
+                }
+            } else {
+                showToast('⚠ ' + message, 'error', 1500);
+            }
+        }
+
+        function showSuccess(elementId, message) {
+            if (elementId) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.textContent = message;
+                    element.style.display = 'block';
+                    setTimeout(() => element.style.display = 'none', 2000);
+                }
+            } else {
+                showToast('✓ ' + message, 'success', 1200);
+            }
+        }
+
+        // Toast helper
+        function showToast(message, type = 'info', timeout = 1000) {
+            try {
+                const container = document.getElementById('toastContainer');
+                if (!container) return;
+
+                // Remove any existing toast to show only the latest one
+                const existingToasts = container.querySelectorAll('.toast');
+                existingToasts.forEach(toast => {
+                    toast.style.animation = 'slideOut 0.2s ease';
+                    setTimeout(() => toast.remove(), 200);
+                });
+
+                // Create new toast
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.textContent = message;
+                container.appendChild(toast);
+
+                // Auto-dismiss after specified timeout (default 1 second)
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.style.animation = 'slideOut 0.2s ease';
+                        setTimeout(() => {
+                            if (toast.parentNode) toast.remove();
+                        }, 200);
+                    }
+                }, timeout);
+            } catch (e) {
+                console.error('showToast error', e);
+            }
+        }
+
+        // Promise-based confirm modal
+        function showConfirm(message) {
+            return new Promise((resolve) => {
+                const modal = document.getElementById('confirmModal');
+                const msgEl = document.getElementById('confirmMessage');
+                const okBtn = document.getElementById('confirmOkBtn');
+                const cancelBtn = document.getElementById('confirmCancelBtn');
+
+                if (!modal || !msgEl || !okBtn || !cancelBtn) {
+                    // fallback to window.confirm if modal not present
+                    resolve(window.confirm(message));
+                    return;
+                }
+
+                msgEl.textContent = message;
+                modal.classList.add('active');
+
+                const cleanup = () => {
+                    modal.classList.remove('active');
+                    okBtn.removeEventListener('click', onOk);
+                    cancelBtn.removeEventListener('click', onCancel);
+                };
+
+                const onOk = () => { cleanup(); resolve(true); };
+                const onCancel = () => { cleanup(); resolve(false); };
+
+                okBtn.addEventListener('click', onOk);
+                cancelBtn.addEventListener('click', onCancel);
+            });
+        }
+
+        // ===== Event Listeners =====
+        document.getElementById('loginForm').addEventListener('submit', handleLogin);
+        document.getElementById('signupForm').addEventListener('submit', handleSignup);
+
+        // Check if user is already logged in
+        window.addEventListener('load', () => {
+            const savedToken = localStorage.getItem('authToken');
+            const savedUser = localStorage.getItem('currentUser');
+            
+            if (savedToken && savedUser) {
+                authToken = savedToken;
+                currentUser = JSON.parse(savedUser);
+                showDashboard();
+            }
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            const modals = document.querySelectorAll('.modal.active');
+            modals.forEach(modal => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+        function setCurrentDateTimeForMeeting() {
+            const input = document.getElementById('meetingDate');
+            if (!input) return;
+
+            const now = new Date();
+        // Convert to local datetime format: YYYY-MM-DDTHH:MM
+             const year = now.getFullYear();
+             const month = String(now.getMonth() + 1).padStart(2, '0');
+             const day = String(now.getDate()).padStart(2, '0');
+             const hours = String(now.getHours()).padStart(2, '0');
+             const minutes = String(now.getMinutes()).padStart(2, '0');
+
+            input.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+        async function loadUserListForTask(selectId = 'taskAssignedTo', roleFilter = 'STUDENT') {
+    try {
+        const res = await fetch(`${API_BASE_URL}/users/getuser`, {
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+
+        if (!res.ok) throw new Error('Failed to load users');
+
+        const users = await res.json();
+        const select = document.getElementById(selectId);
+
+        select.innerHTML = '<option value="">Select a user</option>';
+
+        let filteredUsers = users;
+        if (roleFilter) {
+            filteredUsers = users.filter(u => u.role === roleFilter);
+        }
+
+        filteredUsers.forEach(u => {
+              const option = document.createElement('option');
+              option.value = u.name;        // 👈 NAME is sent
+              option.textContent = u.name;  // shown in UI
+              select.appendChild(option);
+          });
+
+    } catch (err) {
+        console.error('Error loading users:', err);
+    }
+    }
+    function isValidNameWithInitial(name) {
+    const pattern = /^[A-Z][a-zA-Z]+(\s[A-Z]){1,2}$/;
+    return pattern.test(name.trim());
+    }
+
+    // ===== Team Meeting Functions =====
+    function onMeetingTypeChange() {
+        const type = document.getElementById('meetingType').value;
+        const teamSetupSection = document.getElementById('teamSetupSection');
+        
+        if (type === 'TEAM') {
+            teamSetupSection.style.display = 'block';
+            renderTeamInputs();
+        } else {
+            teamSetupSection.style.display = 'none';
+        }
+    }
+
+    function renderTeamInputs() {
+        const numTeams = parseInt(document.getElementById('numTeams').value, 10) || 1;
+        const teamsInputs = document.getElementById('teamsInputs');
+        teamsInputs.innerHTML = '';
+
+        for (let i = 0; i < numTeams; i++) {
+            const teamDiv = document.createElement('div');
+            teamDiv.style.padding = '16px';
+            teamDiv.style.marginBottom = '16px';
+            teamDiv.style.backgroundColor = '#f8fafc';
+            teamDiv.style.borderRadius = '8px';
+            teamDiv.style.border = '1px solid #e2e8f0';
+
+            teamDiv.innerHTML = `
+                <h4 style="margin-bottom: 12px; color: #0f172a; font-weight: 600; font-size: 14px;">Team ${i + 1}</h4>
+                <div class="form-group">
+                    <label for="teamName_${i}" style="font-size: 13px;">Team Name</label>
+                    <input type="text" id="teamName_${i}" name="teamName_${i}" placeholder="e.g., Team-A" required>
+                </div>
+                <div class="form-group">
+                    <label for="teamParticipants_${i}" style="font-size: 13px;">Select Participants (Hold Ctrl/Cmd to select multiple)</label>
+                    <select id="teamParticipants_${i}" name="teamParticipants_${i}" multiple required style="height: 140px; overflow-y: auto; padding: 8px;">
+                        <option value="">-- Select participants --</option>
+                    </select>
+                </div>
+            `;
+            teamsInputs.appendChild(teamDiv);
+            loadUserListForTask(`teamParticipants_${i}`, 'STUDENT');
+        }
+    }
+    async function loadDeadlineAlerts(){
+
+    try{
+
+        const response = await fetch(`${API_BASE_URL}/tasks/alerts`,{
+            headers:{
+                'Authorization':`Bearer ${authToken}`
+            }
+        });
+
+        if(!response.ok) return;
+
+        const alerts = await response.json();
+
+        const banner = document.getElementById("deadlineAlertBanner");
+        const content = document.getElementById("deadlineAlertContent");
+
+        if(!alerts || alerts.length === 0){
+            banner.classList.add("hidden");
+            return;
+        }
+
+        banner.classList.remove("hidden");
+
+        content.innerHTML = alerts.map(alert=>{
+
+            const typeClass = alert.alertType === "URGENT"
+                ? "urgent"
+                : "warning";
+
+            return `
+                <div class="deadline-alert-item ${typeClass}">
+                    <strong>⚠ ${alert.title}</strong>
+                    — Due in ${alert.hoursRemaining} hours
+                    (Priority: ${alert.priority})
+                </div>
+            `;
+
+        }).join("");
+
+    }catch(err){
+        console.error("Alert loading failed",err);
+    }
+}
+async function cancelTask(taskId) {
+    if (!confirm("Are you sure you want to cancel this task?")) return;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/tasks/cancel/${taskId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+
+        const data = await response.text();
+
+        if (response.ok) {
+            showToast("Task Cancelled Successfully", "success");
+            loadAllTasks();
+        } else {
+            showToast(data, "error");
+        }
+
+    } catch (error) {
+        console.error(error);
+        showToast("Cancel Failed", "error");
+    }
+    
+}
+</script>
+
+    <!-- Toast container -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <!-- Confirm modal -->
+    <div id="confirmModal" class="confirm-modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="confirm-box">
+            <p id="confirmMessage">Are you sure?</p>
+            <div style="text-align:right; margin-top:16px;">
+                <button id="confirmCancelBtn" class="btn btn-secondary">Cancel</button>
+                <button id="confirmOkBtn" class="btn btn-primary" style="margin-left:8px;">OK</button>
+            </div>
+        </div>
+    </div>
+    <div id="cancelConfirmModal" class="confirm-modal">
+    <div class="confirm-box">
+        <h3 style="margin-bottom:10px;">Cancel Task</h3>
+        <p>Are you sure you want to cancel this task?</p>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:15px;">
+            <button class="btn btn-secondary btn-small" onclick="closeCancelModal()">No</button>
+            <button class="btn btn-danger btn-small" onclick="confirmCancel()">Yes, Cancel</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
